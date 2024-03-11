@@ -1,0 +1,179 @@
+@media screen and (min-width: 480px) {
+
+    .login_page {
+        width: 100vmax;
+        height: 100vh;
+        background: url('../imgs/video.jpg');
+        background-position: center top; 
+        background-repeat: no-repeat;
+        background-size: cover;
+        padding-top: 3rem;
+        padding-left:inherit;
+        padding-right:inherit;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-direction:column;
+    }
+}
+
+.login {
+    max-width:  480px;
+    width: 100%;
+    padding: 35px 25px;
+    background: #ececec;
+    box-shadow: 5px 15px 30px -5px #212121;
+    text-align: center;
+    display: grid;
+    place-items: center;
+    position: relative;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 13%;
+    height: 100%;
+    transform:  translateX(-100%);
+    background-image: linear-gradient(to right, #ffffff, #bebec5, #7e828e, #414b5a, #041b2b);
+    transition: 0.5s;
+    opacity: 0%;
+}
+
+.login::after{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    transform:  translateY(-100%);
+    background-image: linear-gradient(to left, #ffffff, #bebec5, #7e828e, #414b5a, #041b2b);
+    transition: 0.5s;
+    opacity: 0%;
+}
+
+.login:hover::before{
+    top:0;
+    left: 106%;
+    transition: 0.5s;
+    background-image: linear-gradient(to bottom, #ffffff, #bebec5, #7e828e, #414b5a, #041b2b);
+    animation: fade 0.5s normal;
+}
+
+.login:hover::after{
+    top: 110%;
+    left: 0;
+    transition: 0.5s;
+    background-image: linear-gradient(to right, #ffffff, #bebec5, #7e828e, #414b5a, #041b2b);
+    animation: fade 0.5s normal;
+}
+
+@keyframes fade {
+    0%{
+        opacity: 0%;
+    }
+    20%{
+        opacity: 10%;
+    }
+    40%{
+        opacity: 30%;
+    }
+    60%{
+        opacity: 10%;
+    }
+    100%{
+        opacity: 0%;
+    }
+}
+
+.login form{
+    color: #041b2b;
+    position: relative;
+    width: 80%;
+    z-index: 2;
+    display: flex;
+    justify-content:  center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.login form h1{
+    font-size: 40px;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    font-family: Manrope, sans-serif;
+}
+
+.login form .login_box{
+    width: 100%;
+    position: relative;
+    margin: 20px 0;
+    border-bottom:  2px solid #041b2b;
+}
+
+.login form .login_box input{
+    width: 100%;
+    height: 30px;
+    background: none;
+    padding-left: 5px;
+    font-size: 20px;
+    border: none;
+    color: #041b2b;
+    letter-spacing:  1px;
+    font-family:  Manrope, sans-serif;
+}
+
+.login form .login_box input:focus{
+    outline: none;
+}
+  
+.login form label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    color: #041b2b;
+    transform: translateY(-50%);
+    font-size: 20px;
+    pointer-events: none;
+    transition: 0.4s;
+    font-family:  Manrope, sans-serif
+}
+
+.login form .login_box input:focus~label,
+.login form .login_box input:valid~label{
+    top: 0;
+    color: #041b2b;
+    transform: translateY(-90%);
+    color: #E49D22;
+}
+
+.login .login_button{
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.login .login_button button{
+    width: 100%;
+    border: none;
+    padding: 8px;
+    font-family:  Manrope, sans-serif;
+    cursor: pointer;
+    font-size: x-large;
+    background: #041b2b;
+    color: #f8f7ff;
+    border-radius: 5px;
+    transform: scale(1);
+    transition: 0.15s;
+    margin-top: 10px;
+}
+
+.login .login_button button:hover{
+    transform: scale(0.9);
+    opacity: 0.9;
+}
