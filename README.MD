@@ -23,7 +23,6 @@ Designed and deployed a scalable API serving an in-house LLM with a real time ch
 
 ## Demo
 <video controls autoPlay loop muted src="./Fullstack_Update.mp4" title="Demo"></video>
-[!video](https://github.com/Abiel-Almonte/ACA/blob/main/Fullstack_Update.mp4)
 >**Note**:
 >Currently, employing an unrelated dataset for demonstration purposes due to the absence of the one advertised, which is not yet finished.
 
