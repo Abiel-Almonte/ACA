@@ -23,6 +23,8 @@ Designed and deployed a scalable API serving an in-house LLM with a real time ch
 
 ## Demo
 <video controls autoPlay loop muted src="./Fullstack_Update.mp4" title="Demo"></video>
+(https://mail.google.com/mail/u/0?ui=2&ik=1cc634c843&attid=0.1&permmsgid=msg-a:r-636977443800828222&th=18e07d612dd3baca&view=att&disp=safe&realattid=f_ltch3iqh0)
+
 >**Note**:
 >Currently, employing an unrelated dataset for demonstration purposes due to the absence of the one advertised, which is not yet finished.
 
