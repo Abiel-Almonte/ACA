@@ -22,9 +22,7 @@ Designed and deployed a scalable API serving an in-house LLM with a real time ch
 <div style="text-align: right"> Source aws.amazon.com </div>
 
 ## Demo
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=A1MYbAsmZ3A"  title="Demo" frameborder="0" allowfullscreen></iframe>
-<video controls autoPlay loop muted src="https://www.youtube.com/watch?v=A1MYbAsmZ3A" title="Demo"></video>
-
+![alt text](Fullstack_Update.gif)
 [![Demo Video](https://img.youtube.com/vi/A1MYbAsmZ3A/0.jpg)](https://www.youtube.com/watch?v=A1MYbAsmZ3A)
 
 >**Note**:
