@@ -19,11 +19,10 @@ Designed and deployed a scalable API serving an in-house LLM with a real time ch
 
 ![RAG Screenshot](https://docs.aws.amazon.com/images/sagemaker/latest/dg/images/jumpstart/jumpstart-fm-rag.jpg)
 
-<div style="text-align: right"> Source aws.amazon.com </div>
+*Source: aws.amazon.com*
 
 ## Demo
-![alt text](Fullstack_Update.gif)
-[![Demo Video](https://img.youtube.com/vi/A1MYbAsmZ3A/0.jpg)](https://www.youtube.com/watch?v=A1MYbAsmZ3A)
+![Demo](Fullstack_Update.gif)
 
 >**Note**:
 >Currently, employing an unrelated dataset for demonstration purposes due to the absence of the one advertised, which is not yet finished.
