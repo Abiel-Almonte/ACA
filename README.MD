@@ -28,12 +28,12 @@ Designed and deployed a scalable API serving an in-house LLM with a real time ch
 >Currently, employing an unrelated dataset for demonstration purposes due to the absence of the one advertised, which is not yet finished.
 
 ## Future Additions
-1. **vLLM**:
+1. **Dev Contianer**
+2. **vLLM**:
     - Continous Batching
-    - Paged Attention
     - Distributed Inference
 
-2. **Completed Dataset**:
+3. **Completed Dataset**:
     - **Professor Profile**
         - Biography
         - Research & Educational Interests
@@ -48,7 +48,6 @@ Designed and deployed a scalable API serving an in-house LLM with a real time ch
     - **Course information**
         - Course Description 
         - Majors' Course Path
-3. **Dev Container**
 
 ## Current App Structure
 
