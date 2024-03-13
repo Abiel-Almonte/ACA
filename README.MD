@@ -25,6 +25,8 @@ Designed and deployed a scalable API serving an in-house LLM with a real time ch
 <iframe width="560" height="315" src="https://www.youtube.com/watch?v=A1MYbAsmZ3A"  title="Demo" frameborder="0" allowfullscreen></iframe>
 <video controls autoPlay loop muted src="https://www.youtube.com/watch?v=A1MYbAsmZ3A" title="Demo"></video>
 
+[![Demo Video](https://img.youtube.com/vi/A1MYbAsmZ3A/0.jpg)](https://www.youtube.com/watch?v=A1MYbAsmZ3A)
+
 >**Note**:
 >Currently, employing an unrelated dataset for demonstration purposes due to the absence of the one advertised, which is not yet finished.
 
