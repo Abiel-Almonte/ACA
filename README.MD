@@ -32,6 +32,7 @@ Designed and deployed a scalable API serving an in-house LLM with a real time ch
 2. **vLLM**:
     - Continous Batching
     - Distributed Inference
+    - Paged Attention
 
 3. **Completed Dataset**:
     - **Professor Profile**
@@ -62,12 +63,14 @@ To deploy this project run
 
 ```bash
   git clone https://github.com/Abiel-Almonte/ACA.git
-  cd ACA/server/app_milvus
+  cd ACA/server/milvus
   docker compose up -d
   cd ../
   serve run config.yaml
   cd ../client
   npm start
 ```
+>**Note**: 
+>Must download and AWQ quantize Mistral 7B \
 >**WARNING**:
 >Must have at least 6GB of VRAM
