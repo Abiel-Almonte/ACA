@@ -1,49 +1,23 @@
-import torch
-from transformers import (
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    BitsAndBytesConfig,
-    TextIteratorStreamer,
-    pipeline
-)
-from langchain.llms.huggingface_pipeline import HuggingFacePipeline
+from vllm.engine.async_llm_engine import AsyncLLMEngine
+from vllm.engine.arg_utils import AsyncEngineArgs
+from transformers import AutoTokenizer
+
+MODEL= './Mistral-7B-Instruct-v0.2-awq' #quantized
+GPU_UTIL= 0.8
+MAX_LEN= 1024
 
 class Model():
     def __init__(self):
 
-        bnb_config= BitsAndBytesConfig(
-            load_in_4bit=True,
-            bnb_4bit_compute_dtype=torch.float16,
-            bnb_4bit_quant_type='nf4',
-            bnb_4bit_use_double_quant=True,
+        self.tokenizer= AutoTokenizer.from_pretrained(MODEL)
+
+        engine_args= AsyncEngineArgs(
+            MODEL,
+            max_model_len=MAX_LEN,
+            gpu_memory_utilization=GPU_UTIL,
         )
 
-        model= 'mistralai/Mistral-7B-Instruct-v0.2'
-
-        tokenizer= AutoTokenizer.from_pretrained(model, use_fast=False)
-        llm= AutoModelForCausalLM.from_pretrained(
-            model,
-            device_map= 'cuda:0',
-            torch_dtype=torch.float16,
-            quantization_config= bnb_config,
-            #attn_implementation= 'flash_attention_2',
-        )
-        self.streamer= TextIteratorStreamer(
-            tokenizer,
-            timeout=0,
-            skip_prompt=True,
-            skip_special_tokens=True
-        )
-
-        self.pipe= pipeline(
-            task='text-generation',
-            model=llm,
-            tokenizer=tokenizer,
-            pad_token_id= tokenizer.eos_token_id,
-            streamer= self.streamer,
-            device_map='cuda:0',
-            max_new_tokens=512
-        )
+        self.engine= AsyncLLMEngine.from_engine_args(engine_args)
 
     def __call__(self):
-        return HuggingFacePipeline(pipeline=self.pipe)
+        return {'vllm': self.engine, 'tokenizer': self.tokenizer}

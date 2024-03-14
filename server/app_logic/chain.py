@@ -1,10 +1,20 @@
+
+
+
+
+
+
+
+
+# Will soon be replaced for logic.py, removing langchain from model logic completely to implment dynamic RAG
+
 from langchain.schema.output_parser import StrOutputParser
 from langchain_core.messages import get_buffer_string
 from langchain_core.prompts import format_document
 from langchain.prompts import PromptTemplate
 from operator import itemgetter
 
-from .database import KMIT_Database
+from .vectorstore import KMIT_Database
 
 kmit_data= KMIT_Database()
 
