@@ -29,10 +29,6 @@ Designed and deployed a scalable API serving an in-house LLM with a real time ch
 
 ## Future Additions
 1. **Dev Contianer**
-2. **vLLM**:
-    - Continous Batching
-    - Distributed Inference
-    - Paged Attention
 
 3. **Completed Dataset**:
     - **Professor Profile**
