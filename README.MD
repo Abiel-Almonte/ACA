@@ -54,7 +54,7 @@ Designed and deployed a scalable API serving an in-house LLM with a real time ch
 
 **Client:** React.js
 
-**Server:** Ray Serve, Websocket, FastAPI, LangChain, HuggingFace, Milvus, Docker 
+**Server:** Websocket, FastAPI, Ray Serve, vLLM, Milvus, Docker, Langchain, HuggingFace
 
 
 ## Deployment
