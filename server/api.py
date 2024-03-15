@@ -2,80 +2,82 @@ import uuid
 import asyncio
 import logging
 from ray import serve
-from queue import Empty
 from urllib.parse import parse_qs
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from langchain_core.messages import AIMessage, HumanMessage
-
-from app_model import Model
-from app_logic import Logic
-
+from fastapi.middleware.cors import CORSMiddleware
+from model import vLLM_Engine
+from logic import Router
 LINE= ''.join('-' for _ in range(140))
-logger = logging.getLogger('ray.serve')
-app = FastAPI()
 
-@serve.deployment(num_replicas=1, ray_actor_options={"num_cpus": 0, 'num_gpus': 1})
+logger= logging.getLogger('ray.serve')
+app= FastAPI()
+
+# Setup CORS exceptions
+origins = [
+    'http://localhost:8000',
+    'http://localhost:3000',
+    '*'
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=['*'],
+    allow_headers=['*']
+)
+
+@serve.deployment(
+    num_replicas=1,
+    ray_actor_options={"num_cpus": 0, 'num_gpus': 1},
+    max_concurrent_queries=100
+)
+
 @serve.ingress(app)
 class LLMServe:
     def __init__(self):
-
-        self.loop = asyncio.get_running_loop()
-
-        llm= Model()
-        logic = Logic(llm())
-
-        self.streamer = llm.streamer
-        self.chain=logic.chain
+        engine= vLLM_Engine()
+        self.logic=Router(engine)
 
         self.connections= {}
-        self.users = {}
+        logger.info('Setup Complete')
 
     @app.websocket("/")
     async def handle_request(self, websocket: WebSocket) -> None:
 
         await websocket.accept()
-
         query_params= parse_qs(websocket.url.query)
         username= query_params.get('username')[0]
-        _uuid = str(uuid.uuid4())
 
         if username is None:
             await websocket.close()
 
-        await self.register(websocket, _uuid, username)
+        _uuid= await self.register(websocket, username)
         for text in f'Hello {username}, how can I assist you?'.split():
             await asyncio.sleep(0.07)
             await websocket.send_text(text + ' ')
 
         try:
             while True:
-
                 prompt = await websocket.receive_text()
-
                 if prompt.strip() != '':
-                    logger.info(f'Got prompt: {prompt}')
-                    convo= self.users[_uuid]['state']['conversation']
-                    if len(convo)> 6:
-                        convo = convo[-6:]
-                    self.loop.run_in_executor(None, self.chain.invoke, {'question':prompt, 'chat_history':convo})
-                    convo.append(HumanMessage(content= prompt))
+                    output= await self.logic.invoke_chat(prompt, self.connections[_uuid]['state']['conversation'], _uuid)
                     response= ''
-                    async for text in self._stream():
+                    async for text in output:
                         await websocket.send_text(text)
-                        response += text
+                        logger.info(f'Yielding Token:{text}')
+                        response+= text
                     await websocket.send_text('<<Response Finished>>')
-                    convo.append(AIMessage(content= response))
-                    #await self.broadcast()
-                    logger.info(f"\n{LINE}\n{username} sent a message, new history:\n{self.users[_uuid]['state']}\n{LINE}")
+                    self.connections[_uuid]['state']['conversation'].append({'role': 'assistant', 'content': response})
+                    #logger.info(f"\n{LINE}\n{username} sent a message, new history:\n{self.users[_uuid]['state']}\n{LINE}")
 
         except WebSocketDisconnect:
             await self.unregister(_uuid)
 
-    async def register(self, websocket, _uuid, username):
+    async def register(self, websocket, username):
+        _uuid= str(uuid.uuid4())
 
-        self.connections[_uuid]= websocket
-        self.users[_uuid] = {
+        self.connections[_uuid] = {
+            'connection':websocket,
             'username': username,
             'state': {
                 'conversation': []
@@ -83,27 +85,16 @@ class LLMServe:
         }
 
         logger.info(f"\n{LINE}\nRegistered:\nUsername: {username}\nUUID: {_uuid}\n{LINE}")
+        return _uuid
+
 
     async def unregister(self, _uuid):
-
-        logger.info(f"\n{LINE}\nUnregistered\nUsername: {self.users[_uuid]['username']}\nUUID: {_uuid}\n{LINE}")
-        del self.users[_uuid]
+        logger.info(f"\n{LINE}\nUnregistered\nUsername: {self.connections[_uuid]['username']}\nUUID: {_uuid}\n{LINE}")
+        del self.connections[_uuid]
     
     async def broadcast(self):
         for _, connection in self.connections.items():
             _dict= self.users
             await connection.send_json(_dict)
-
-
-    async def _stream(self):
-
-        while True:
-            try:
-                for chunk in self.streamer:
-                    logger.info(f'Yielding token: "{chunk}"')
-                    yield chunk
-                break
-            except Empty:
-                await asyncio.sleep(0.001)
 
 deployment = LLMServe.bind()

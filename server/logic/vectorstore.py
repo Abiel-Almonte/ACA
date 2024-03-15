@@ -12,15 +12,13 @@ USER= 'root'
 PASS= 'Milvus'
 CONNECTION_ARGS= {'host': HOST, 'port': PORT, 'user': USER, 'password': PASS}
 
-TYPE= 'similarity'
 SBERT= 'all-MiniLM-L6-v2'
-SEARCH_CONFIG= {'k': 6, 'lambda_mult': 0.25}
-ef= HuggingFaceEmbeddings(SBERT)
+ef= HuggingFaceEmbeddings(model_name=SBERT)
 
 DB_CONFIG= {'embedding': ef, 'connection_args': CONNECTION_ARGS, 'drop_old':True}
 
 #PRELOADED DS 
-dataset= load_dataset('./data')
+dataset= load_dataset('/home/abiel/workspace/ACA_Fullstack/server/logic/data.pq')
 dataset= concatenate_datasets([dataset[x]for x in dataset.keys()])
 
 #Creating list of langchain compatible documents
@@ -41,11 +39,7 @@ for i in range(len(dataset)):
 
 #Creating a vectordb using Lanchain-Milvus
 vectordb= Milvus.from_documents(documents= docs, **DB_CONFIG)
-retriever= vectordb.as_retriever(search_type= TYPE, search_kwargs= SEARCH_CONFIG)
 
 @dataclass
-class KMIT_Database:
-    retriever = retriever
-
-
-
+class Vectorstore:
+    vectordb = vectordb
