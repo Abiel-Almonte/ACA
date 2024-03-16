@@ -15,7 +15,7 @@ Designed and deployed a scalable API serving an in-house LLM with a real time ch
 
 5. **Scalability and Efficiency**: By deploying a scalable API, idealy the AI app can handle a large volume of requests from students without compromising performance. This ensures that students receive prompt assistance and support, even during peak periods of course selection.
 
-6. **Dynamic Retrieval-Augmented Generation (RAG)**: My approach to driving the entire interaction between the LLM and the user involves utilizing a retriever module, if deemed necessary by the LLM, to select documents from a knowledge source based on the user's query, employing a vector database. These documents, once retrieved, act as context or knowledge sources for the LLM to generate a response that is both coherent and contextually relevant.
+6. **Dynamic Retrieval-Augmented Generation (RAG)**: My approach to driving the entire interaction between the LLM and the user involves utilizing a retriever module, if deemed necessary by the LLM, to select documents from a knowledge source based on the user's query, employing a vector database. These documents, once retrieved, act as context for the LLM to generate a response that is both coherent and contextually relevant.
 
     |![Dynamic RAG](./media/logic_workflow.png "Implmented in logic.py")|
     |:--:|
