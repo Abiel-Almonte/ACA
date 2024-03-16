@@ -28,6 +28,7 @@ class Router:
         self,
         prompt:Any,
         _uuid:str,
+        temperature: float= 0.0,
         max_tokens:int= 512,
         stream: bool= False
     ):
@@ -36,7 +37,7 @@ class Router:
             response_generator= self.llm.generate(
                 prompt,
                 SamplingParams(
-                    temperature=0.0,
+                    temperature=temperature,
                     max_tokens=max_tokens
                 ),
                 _uuid
@@ -48,7 +49,7 @@ class Router:
             response_generator= self.llm.generate(
                 None,
                 SamplingParams(
-                    temperature=0.0,
+                    temperature=temperature,
                     max_tokens=max_tokens
                 ),
                 _uuid,
@@ -124,6 +125,7 @@ class Router:
         no_context_response= await self.generate(
             messages,
             _uuid,
+            temperature=0.9,
             max_tokens=128,
             stream=True,
         )
@@ -159,6 +161,7 @@ class Router:
         context_response= await self.generate(
             messages,
             _uuid,
+            temperature=0.9,
             stream=True
         )
 
@@ -172,18 +175,17 @@ class Router:
         top_k: int= TOP_K,
         **kwargs,
     ):
-        if len(messages)> 6:
+        if len(messages)> 4:
             messages.pop(0)
             messages.pop(0)
             
         classification= await self.classify(question, _uuid)
+        await asyncio.sleep(0.0001)
 
         if 'No' in classification:
-            await asyncio.sleep(0.0001)
             response= await self.no_context_pipe(question, messages, _uuid)
             return response
         else:
-            await asyncio.sleep(0.0001)
             standalone_question= await self.rephrase(question, messages, _uuid)
             context= self.similarity_search(standalone_question, top_k)
             await asyncio.sleep(0.0001)

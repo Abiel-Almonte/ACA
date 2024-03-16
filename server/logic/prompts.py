@@ -45,8 +45,7 @@ NO_CONTEXT_PROMPT_GENERAL="""[INST]You are a helpful AI assistant that can assis
 
 
 CHAT_CONTEXT_PROMPT= """
-[INST]You are a helpful AI assistant that helps people find information. Your task is to answer as faithfully as you can. And utilize chat history if necessary.
-
+[INST]You are a helpful AI assistant that helps people find information. Your task is to answer as faithfully and holistically as you can.
 {context}
 
 Question:
