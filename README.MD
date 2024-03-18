@@ -22,7 +22,7 @@ Designed and deployed a scalable API serving an in-house LLM with a real time ch
     |*My code implmentation of "dynamic" RAG: ```./server/logic/logic.py```*|
 
 ## Demo
-![Demo](./media/Fullstack_Update.gif)
+![Demo](./media/Fullstack_Update2.gif)
 
 >**Note**:
 >Currently, employing an unrelated dataset for demonstration purposes due to the absence of the one advertised, which is not yet finished.
