@@ -25,7 +25,7 @@ Designed and deployed a scalable API serving an in-house LLM with a real time ch
 ![Demo](./media/Fullstack_Update2.gif)
 
 >**Note**:
->Currently, employing an unrelated dataset for demonstration purposes due to the absence of the one advertised, which is not yet finished.
+>Currently employing an unfinished dataset.
 
 ## Future Additions
 1. **Dev Contianer**
