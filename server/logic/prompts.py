@@ -9,17 +9,17 @@ No Context Needed
 ####
 Here are some examples:
 
-Inquiry: What is the packbot510?
+Inquiry: What is COP 2210?
 Category: Context Needed
 Inquiry: Hello
 Category: No Context Needed
 Inquiry: What can you do for me?
 Category: No Context Needed
-Inquiry: List some tools
+Inquiry: List some courses
 Category: Context Needed
-Inquiry: What is this robot good for?
+Inquiry: What is professor teaching?
 Category: Context Needed
-Inquiry: What can it do?
+Inquiry: What can I learn from it?
 Category: Context Needed
 ####
 """,
@@ -35,7 +35,7 @@ If the question is refering to previous messages only respond with a single reph
 """
 
 NO_CONTEXT_PROMPT= """
-[INST]You are a helpful AI assistant that can assist people with finding information for FIU's Deactivation & Decommissioning related technologies.
+[INST]You are a helpful AI assistant that can assist people with finding information for FIU's professor and realted courses.
 
 Respond in 150 characters.
 
