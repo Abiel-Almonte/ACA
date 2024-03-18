@@ -25,10 +25,11 @@ dataset= concatenate_datasets([dataset[x]for x in dataset.keys()])
 docs = []
 for i in range(len(dataset)):
 
-    page= f"""'Name': {str(dataset['product'][i])}
+    page= f"""'Name': {str(dataset['name'][i])}
+'Title': {str(dataset['title'][i])}
+'Degree': {str(dataset['degree'][i])}
 'Description': {str(dataset['description'][i])}
-'Benefits': {str(dataset['benefits'][i])}
-'Limitations': {str(dataset['limitations'][i])}
+'website': {str(dataset['website'][i])}
 ---"""
     
     docs.append(
