@@ -28,23 +28,25 @@ Designed and deployed a scalable API serving an in-house LLM with a real time ch
 >Currently employing an unfinished dataset.
 
 ## Future Additions
-1. **Dev Contianer**
+1. **Docker Container**
 
-3. **Completed Dataset**:
-    - **Professor Profile**
+2. **Completed Dataset**:
+    - **Professor Profile** (In Progress)
         - Biography
         - Research & Educational Interests
-        - Honors & Awards
-        - Professional Experience and Activities
-    - **Ratings**
-        - Rate My Professor
-        - Teaching Surveys
-    - **Class Details**
+        - Degrees
+        - Websites
+    - **Ratings** (Done)
+        - Student Perception of Teaching  (SPoT) surveys
+            - A short paper explaining how the ratings were created is located in  ```./media/Ratings_Paper.pdf```
+    - **Class Details** (Done)
         - Weekly Schedule
         - Location
-    - **Course information**
+    - **Course information** (In Progress)
         - Course Description 
-        - Majors' Course Path
+
+>**Note**: 
+>Althogh parts are done, the are still not integrated.
 
 ## Current App Structure
 
