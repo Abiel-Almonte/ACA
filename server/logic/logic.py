@@ -2,9 +2,11 @@ from .vectorstore import Vectorstore
 from vllm import SamplingParams
 from .prompts import (
     CLASSIFICATION_PROMPT,
+    SERVER_PROMPT,
+    SERVER_CONTEXT_PROMPT,
     NO_CONTEXT_PROMPT,
-    STANDALONE_PROMPT,
-    CHAT_CONTEXT_PROMPT,
+    REPHRASE_PROMPT,
+    CONTEXT_PROMPT,
 )
 import asyncio
 from typing import Any
@@ -22,7 +24,6 @@ class Router:
         self.llm= engine.llm
         self.tokenizer= engine.tokenizer
         self.vectorstore= data.vectordb
-        self.steps= []
     
     async def generate(
         self,
@@ -89,7 +90,7 @@ class Router:
             search_kwargs={'k': top_k, 'lamda_mul': LAMBDA}
         )
 
-        docs= retriever.invoke(standalone_question, **{'k':10})
+        docs= retriever.invoke(standalone_question)
         docs= self._combine_documents(docs)
         return docs 
 
@@ -112,7 +113,6 @@ class Router:
             max_tokens=50,
         )
 
-        self.steps.append(f'Classification: {response}')
         return response
     
     async def no_context_pipe(
@@ -121,14 +121,23 @@ class Router:
         messages: list,
         _uuid: str,
     ):  
-        messages.append({'role': 'user', 'content': NO_CONTEXT_PROMPT.format(question= question)})
-        no_context_response= await self.generate(
-            messages,
-            _uuid,
-            temperature=0.9,
-            max_tokens=128,
-            stream=True,
-        )
+        if not messages:
+            messages.append({'role': 'user', 'content': SERVER_PROMPT.format(question= question)})
+            no_context_response= await self.generate(
+                messages,
+                _uuid,
+                max_tokens=128,
+                stream=True,
+            )
+        
+        else:
+            messages.append({'role': 'user', 'content': NO_CONTEXT_PROMPT.format(question= question)})
+            no_context_response= await self.generate(
+                messages,
+                _uuid,
+                max_tokens=128,
+                stream=True,
+            )
 
         return no_context_response
     
@@ -138,32 +147,42 @@ class Router:
         messages: list,
         _uuid: str,
     ):
-        messages.append({'role': 'user', 'content': STANDALONE_PROMPT.format(question= question)})
+        messages.append({'role': 'user', 'content': REPHRASE_PROMPT.format(question= question)})
         standalone_question= await self.generate(
             messages,
             _uuid,
             max_tokens=128,
         )
-
-        self.steps.append(f'Standalone Question: {standalone_question}')
         messages.pop()
-
         return standalone_question
 
     async def context_pipe(
         self,
         question: str,
+        standalone_question: str,
         context:str,
         messages: list,
         _uuid: str
     ):
-        messages.append({'role': 'user', 'content': CHAT_CONTEXT_PROMPT.format(context= context, question= question)})
-        context_response= await self.generate(
-            messages,
-            _uuid,
-            temperature=0.9,
-            stream=True
-        )
+        if not messages:
+            messages.append({'role': 'user', 'content': SERVER_CONTEXT_PROMPT.format(context= context, question= question)})
+            context_response= await self.generate(
+                messages,
+                _uuid,
+                stream=True
+            )
+            messages.pop()
+            messages.append({'role': 'user', 'content': SERVER_PROMPT.format(question= question)})
+        
+        else:
+            messages.append({'role': 'user', 'content': CONTEXT_PROMPT.format(context= context, question= question, standalone_question=standalone_question)})
+            context_response= await self.generate(
+                messages,
+                _uuid,
+                stream=True
+            )
+            messages.pop()
+            messages.append({'role': 'user', 'content': NO_CONTEXT_PROMPT.format(question=question)})
 
         return context_response
 
@@ -175,9 +194,11 @@ class Router:
         top_k: int= TOP_K,
         **kwargs,
     ):
-        if len(messages)> 4:
-            messages.pop(0)
-            messages.pop(0)
+        
+        tokens= self.tokenizer.apply_chat_template(messages, return_tensors='pt')
+        while len(tokens[0]) > 6e3 and len(messages)>1:
+            tokens= self.tokenizer.apply_chat_template(messages, return_tensors='pt')
+            messages.pop(1)
             
         classification= await self.classify(question, _uuid)
         await asyncio.sleep(0.0001)
@@ -189,5 +210,5 @@ class Router:
             standalone_question= await self.rephrase(question, messages, _uuid)
             context= self.similarity_search(standalone_question, top_k)
             await asyncio.sleep(0.0001)
-            response= await self.context_pipe(question, context, messages, _uuid)
+            response= await self.context_pipe(question, standalone_question, context, messages, _uuid)
             return response

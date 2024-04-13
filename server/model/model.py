@@ -14,6 +14,8 @@ class vLLM_Engine():
             MODEL,
             max_model_len=MAX_LEN,
             gpu_memory_utilization=GPU_UTIL,
+            disable_log_requests= True,
+            disable_log_stats= True
         )
 
         self.tokenizer= AutoTokenizer.from_pretrained(MODEL)

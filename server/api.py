@@ -60,15 +60,13 @@ class LLMServe:
             while True:
                 prompt = await websocket.receive_text()
                 if prompt.strip() != '':
-                    output= await self.logic.invoke_chat(prompt, self.connections[_uuid]['state']['conversation'], _uuid)
+                    output= await self.logic.invoke_chat(prompt, self.connections[_uuid]['state']['conversation'], _uuid, 5)
                     response= ''
                     async for text in output:
                         await websocket.send_text(text)
-                        logger.info(f'Yielding Token:{text}')
                         response+= text
                     await websocket.send_text('<<Response Finished>>')
                     self.connections[_uuid]['state']['conversation'].append({'role': 'assistant', 'content': response})
-                    #logger.info(f"\n{LINE}\n{username} sent a message, new history:\n{self.users[_uuid]['state']}\n{LINE}")
 
         except WebSocketDisconnect:
             await self.unregister(_uuid)
