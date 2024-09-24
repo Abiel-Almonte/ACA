@@ -1,5 +1,7 @@
 /volumes/
 /server/milvus/volumes/
 /server/model/__pycache__
+/server/logic/__pycache__
 /server/logic/temp.ipynb
-/server/model/Mistral-7B-Instruct-v0.2-awqs
+/server/logic/index.faiss
+/server/model/Mistral-7B-Instruct-v0.2-awq
